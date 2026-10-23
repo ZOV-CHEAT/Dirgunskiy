@@ -117,6 +117,8 @@ textarea:focus {
                 out = (isUpper ? 'Ї' : 'ї') + '\u0308';
             } else if (lower === 'и') {
                 out = (isUpper ? 'Ї' : 'ї') + '\u0307';
+            } else if (lower === 'й') {
+                out = (isUpper ? 'Ї' : 'ї') + '\u030A';
             } else if (lower === 'п' || lower === 'т') {
                 const next = text[i + 1] ? text[i + 1].toLowerCase() : '';
                 if (next === 'ь' || next === 'ъ') {
@@ -125,7 +127,7 @@ textarea:focus {
                     out = base + mark + text[i + 1];
                     i++;
                 } else {
-                    out = isUpper ? 'Т' : 'т';
+                    out = (isUpper ? 'Т' : 'т') + (lower === 'т' ? '\u0307' : '');
                 }
             } else if (lower === 'ц') {
                 out = (isUpper ? 'Ц' : 'ц') + '\u0308';
@@ -133,6 +135,12 @@ textarea:focus {
                 out = isUpper ? 'З' : 'з';
             } else if (lower === 'з') {
                 out = (isUpper ? 'З' : 'з') + '\u0308';
+            } else if (lower === 'к') {
+                out = isUpper ? 'Г' : 'г';
+            } else if (lower === 'г') {
+                out = (isUpper ? 'Г' : 'г') + '\u0307';
+            } else if (lower === 'д') {
+                out = isUpper ? 'Дз' : 'дз';
             } else if (lower === 'л') {
                 out = isUpper ? 'Ль' : 'ль';
             } else if (lower === 'а') {
@@ -176,6 +184,9 @@ textarea:focus {
                 } else if (next === '\u0307') {
                     out = isUpper ? 'И' : 'и';
                     i++;
+                } else if (next === '\u030A') {
+                    out = isUpper ? 'Й' : 'й';
+                    i++;
                 } else {
                     out = isUpper ? 'Е' : 'е';
                 }
@@ -186,6 +197,14 @@ textarea:focus {
                     i++;
                 } else {
                     out = isUpper ? 'О' : 'о';
+                }
+            } else if (ch === 'Т' || ch === 'т') {
+                const next = text[i + 1];
+                if (next === '\u0307') {
+                    out = isUpper ? 'Т' : 'т';
+                    i++;
+                } else {
+                    out = isUpper ? 'П' : 'п';
                 }
             } else if (ch === 'Ц' || ch === 'ц') {
                 const next = text[i + 1];
@@ -206,6 +225,17 @@ textarea:focus {
                 } else {
                     out = isUpper ? 'С' : 'с';
                 }
+            } else if (ch === 'Г' || ch === 'г') {
+                const next = text[i + 1];
+                if (next === '\u0307') {
+                    out = isUpper ? 'Г' : 'г';
+                    i++;
+                } else {
+                    out = isUpper ? 'К' : 'к';
+                }
+            } else if ((ch === 'Д' || ch === 'д') && text[i + 1] && text[i + 1].toLowerCase() === 'з') {
+                out = isUpper ? 'Д' : 'д';
+                i++;
             } else if (ch === 'Ў' || ch === 'ў') {
                 const next = text[i + 1];
                 if (next === '\u0307') {
@@ -217,8 +247,6 @@ textarea:focus {
             } else if (lower === 'л' && text[i + 1] && text[i + 1].toLowerCase() === 'ь') {
                 out = isUpper ? 'Л' : 'л';
                 i++;
-            } else if (lower === 'т') {
-                out = isUpper ? 'Т' : 'т';
             }
 
             result += out;
